@@ -9,10 +9,10 @@
 # List screen
 1. All the registerd users list will be displayed in that screen.
 2. If the user was expert. '(expert)' will be appended at leading of the user name.
-3. User can click and initiate the chat between both
+3. User can click and initiate the chat between with selected user.
 
 # chat screen
 1. Users can exchange the conversations.
-2. Added the rate limit feature when curren user was not Expert.
+2. Added the rate limit feature when current user was not Expert.
 3. Rate limit feature will disabled if the user was expert.
 
