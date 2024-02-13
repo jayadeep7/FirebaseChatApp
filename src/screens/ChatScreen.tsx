@@ -9,7 +9,11 @@ import {
 } from 'react-native';
 import firestore from '@react-native-firebase/firestore';
 import {Colors} from '../utils/colors';
-import {getAsyncItems, setAsyncItems} from '../utils/Constants';
+import {
+  getAsyncItems,
+  removeAsyncItem,
+  setAsyncItems,
+} from '../utils/Constants';
 
 const ChatScreen: React.FC<{navigation: any; route: any}> = ({
   navigation,
@@ -32,12 +36,23 @@ const ChatScreen: React.FC<{navigation: any; route: any}> = ({
     if (storedCanSendMessageString) {
       const storedCanSendMessage = JSON.parse(storedCanSendMessageString);
       const currentTime = new Date().getTime();
+      const timeLeft = currentTime - storedCanSendMessage.timestamp;
 
       // Check if the rate limit duration has passed
-      if (currentTime - storedCanSendMessage.timestamp > 10000) {
+      if (timeLeft > 10000) {
         setCanSendMessage(true);
       } else {
         setCanSendMessage(storedCanSendMessage.enabled);
+        setTimeout(() => {
+          setCanSendMessage(true); // Enable sending after the rate limit duration
+
+          // Save canSendMessage state with updated timestamp to AsyncStorage
+          removeAsyncItem(
+            `${
+              currentUserRef.current.name + '-' + receiver.name
+            }_canSendMessage`,
+          );
+        }, timeLeft);
       }
     }
   };
@@ -144,9 +159,8 @@ const ChatScreen: React.FC<{navigation: any; route: any}> = ({
         setCanSendMessage(true); // Enable sending after the rate limit duration
 
         // Save canSendMessage state with updated timestamp to AsyncStorage
-        setAsyncItems(
+        removeAsyncItem(
           `${currentUserRef.current.name + '-' + receiver.name}_canSendMessage`,
-          JSON.stringify({enabled: true, timestamp: new Date().getTime()}),
         );
       }, 10000);
     }

@@ -14,4 +14,8 @@ const clearAsyncItems = () => {
   AsyncStorage.clear();
 };
 
-export {getAsyncItems, setAsyncItems, clearAsyncItems};
+const removeAsyncItem = (key: string) => {
+  AsyncStorage.removeItem(key);
+};
+
+export {getAsyncItems, setAsyncItems, clearAsyncItems, removeAsyncItem};
