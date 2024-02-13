@@ -6,7 +6,6 @@ const setAsyncItems = (key: string, value: any) => {
 
 const getAsyncItems = async (key: string) => {
   let value = await AsyncStorage.getItem(key);
-  console.log('in get async ', key, value);
   return value;
 };
 
